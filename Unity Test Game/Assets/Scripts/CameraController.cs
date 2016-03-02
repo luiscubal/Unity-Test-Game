@@ -5,6 +5,10 @@ public class CameraController : MonoBehaviour {
 
     public GameObject Player;
     public float CameraRotationSpeed = 3;
+    public float CameraVerticalSpeed = 30;
+
+    public float MinVerticalAngle = 20;
+    public float MaxVerticalAngle = 80;
 
     Vector3 offset;
     
@@ -22,11 +26,22 @@ public class CameraController : MonoBehaviour {
     {
         var playerPosition = Player.transform.position;
 
+        var verticalCameraAxis = Input.GetAxis("Camera Vertical") * CameraVerticalSpeed;
         var horizontalCameraAxis = Input.GetAxis("Camera Horizontal") * CameraRotationSpeed;
 
-        var rotationCenter = playerPosition + new Vector3(0, offset.y, 0);
+        // Horizontal Rotation
+        var horizontalRotationCenter = playerPosition + new Vector3(0, offset.y, 0);
+        transform.RotateAround(horizontalRotationCenter, Vector3.up, horizontalCameraAxis);
 
-        transform.RotateAround(rotationCenter, Vector3.up, horizontalCameraAxis);
+        // Vertical Rotation
+        var verticalRotationCenter = Player.transform.position;
+        var angle = transform.localEulerAngles.x;
+        var targetAngle = angle + verticalCameraAxis;
+        targetAngle = Mathf.Max(targetAngle, MinVerticalAngle);
+        targetAngle = Mathf.Min(targetAngle, MaxVerticalAngle);
+        var diffAngle = targetAngle - angle;
+        diffAngle *= Mathf.Deg2Rad;
+        transform.RotateAround(verticalRotationCenter, transform.right, diffAngle);
 
         UpdateOffset();
     }

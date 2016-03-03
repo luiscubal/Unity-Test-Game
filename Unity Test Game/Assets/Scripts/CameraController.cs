@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraController : MonoBehaviour {
+public class CameraController : MonoBehaviour
+{
 
     public GameObject Player;
     public float CameraRotationSpeed = 3;
@@ -11,8 +12,8 @@ public class CameraController : MonoBehaviour {
     public float MaxVerticalAngle = 80;
 
     Vector3 offset;
-    
-	void Start()
+
+    void Start()
     {
         UpdateOffset();
     }
@@ -45,11 +46,11 @@ public class CameraController : MonoBehaviour {
 
         UpdateOffset();
     }
-        
-	void LateUpdate()
+
+    void LateUpdate()
     {
         var playerPosition = Player.transform.position;
 
         transform.position = playerPosition + offset;
-	}
+    }
 }
